@@ -38,12 +38,12 @@ impl Todo {
         if self.is_done { TODO_DONE } else { TODO_NOT_DONE }
     }
 
-    pub fn to_string(&self) -> String {
+    pub fn as_line(&self) -> String {
         format!("{} {}\n", self.is_done_char(), self.description)
     }
 
-    pub fn to_string_colors(&self) -> ColoredString {
-        let line = self.to_string();
+    pub fn as_colored_line(&self) -> ColoredString {
+        let line = self.as_line();
 
         if self.is_done {
             line.green()
@@ -52,4 +52,3 @@ impl Todo {
         }
     }
 }
-

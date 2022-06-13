@@ -69,14 +69,15 @@ impl TodoList {
             .open(todo_filename)
             .expect("Can not open a file.");
 
-        todo_file.write(
+        todo_file.write_all(
             format!("= {} =\n", self.date.format("%d. %m. %Y")).as_bytes()
         ).expect("Error while writing a header to a file.");
         let mut buffer = String::new();
         for todo in self.todos.iter() {
-            buffer.push_str(&todo.to_string());
+            buffer.push_str(&todo.as_line());
         }
-        todo_file.write(buffer.as_bytes()).expect("Error while saving file.");
+        todo_file.write_all(buffer.as_bytes())
+            .expect("Error while saving file.");
     }
 
     fn load_file(&mut self) {
@@ -103,17 +104,16 @@ impl TodoList {
 
     fn create_file(&self) -> fs::File {
         let todo_filename = self.get_filename();
-        let todo_file = fs::File::create(&todo_filename)
-            .expect("Can not create todo file.");
 
-        todo_file
+        fs::File::create(&todo_filename)
+            .expect("Can not create todo file.")
     }
 }
 
 impl Display for TodoList {
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
         for (index, todo) in self.todos.iter().enumerate() {
-            write!(formatter, "{}) {}", index + 1, todo.to_string_colors())?;
+            write!(formatter, "{}) {}", index + 1, todo.as_colored_line())?;
         }
 
         Ok(())

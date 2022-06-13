@@ -11,7 +11,7 @@ use todolist::TodoList;
 use todo::Todo;
 
 fn main() {
-    let arg = env::args().skip(1).next();
+    let arg = env::args().nth(1);
     let mut todos = match arg {
         Some(date_string) => {
             TodoList::from_date_string(date_string)
